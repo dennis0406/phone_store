@@ -20,12 +20,12 @@ function Checkout(props) {
           console.log(result.text);
           alert("Your order has been success full!");
           setInputs({});
+          window.location = "/";
           
       }, (error) => {
           console.log(error.text);
       });
   };
-
 
   return (
     <>
@@ -65,6 +65,13 @@ function Checkout(props) {
           value={inputs.email || ""}
           onChange={handleChange}
           placeholder="Email..."
+        />
+        <br />
+        <input
+          type="text"
+          name="created"
+          value={new Date().toLocaleDateString()}
+          hidden
         />
         <br />
         <button className="checkout__btn" type="submit" >

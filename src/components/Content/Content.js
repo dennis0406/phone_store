@@ -4,7 +4,7 @@ import { Card } from "./Card/Card";
 function Content() {
   const json_cart = JSON.parse(localStorage.getItem("cart"));
   const [listProducts, setListProducts] = useState([]);
-  const [listCart, setListCart] = useState(json_cart ?? []);
+  const [listCart, setListCart] = useState(json_cart ? json_cart : []);
   const [type, setType] = useState("");
 
   const addItem = (product) => {
@@ -15,8 +15,26 @@ function Content() {
       price_phone: product.price_image,
       quanlity: 1,
     };
-    setListCart((prev) => [...prev, cart]);
-    localStorage.setItem("cart", JSON.stringify(listCart));
+    setListCart(json_cart ? json_cart : []);
+    let check = false;
+    const arr = listCart;
+    arr.forEach(element => {
+      if(element.id_phone === cart.id_phone){
+        element.quanlity +=1;
+        setListCart(arr);
+        localStorage.setItem("cart", JSON.stringify(arr));
+        alert("Đã thêm vào giỏ hàng thành công");
+        console.log(arr);
+        check = true;
+      }
+    });
+    if(check){
+      return;
+    }
+    console.log("still add");
+    arr.push(cart);
+    setListCart(arr);
+    localStorage.setItem("cart", JSON.stringify(arr));
     alert("Đã thêm vào giỏ hàng thành công");
   };
   const handlerOnchange = (e) => {
@@ -29,7 +47,6 @@ function Content() {
       .get(`https://61bc10bcd8542f001782451a.mockapi.io/Products`)
       .then((res) => {
         setListProducts(res.data);
-        console.log(listProducts);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -44,8 +61,9 @@ function Content() {
       />
       <div className="col">
         {type === ""
-          ? listProducts.map((product) => (
+          ? listProducts.map((product, index) => (
               <Card
+                key={index}
                 img={product.image_phone}
                 title={product.name_image}
                 price={product.price_image}

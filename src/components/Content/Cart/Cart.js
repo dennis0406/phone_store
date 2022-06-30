@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./Cart.css";
 function Cart () {
     const json_cart = JSON.parse(localStorage.getItem("cart"));
-    const [cart,setCart] = useState(json_cart ?? []);
+    const [cart,setCart] = useState(json_cart ? json_cart : []);
     let total = 0;
     const handlerChange = (e) => {
         const nam = e.target.name;
@@ -15,9 +15,7 @@ function Cart () {
         });
       }; 
     const deleteItem = (id) => {
-      console.log(id);
-    const json_cart = JSON.parse(localStorage.getItem("cart"));
-      
+      console.log(id);      
 
       setCart((prev)=>{
         let ar = [];
@@ -46,7 +44,7 @@ function Cart () {
      return (
        <div key={index} className="product">
          <div className="product-image">
-           <img src={prduct.img} />
+           <img src={prduct.img} alt=""/>
          </div>
          <div className="product-details">
            <p className="product-description">{prduct.name_phone}</p>
